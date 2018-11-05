@@ -1,6 +1,6 @@
 # CSS-HTML-Minify
 
-- HTML &amp; CSS Minify Lib &amp; App based on Regexes &amp; parallel MultiReplaces. Pull Requests welcome.
+- HTML &amp; CSS Minify Lib &amp; App based on Regexes &amp; parallel MultiReplaces. **Pull Requests welcome.**
 
 
 # Use
