@@ -79,11 +79,12 @@ let
   re_minifyAll_js2 = re(reMinifyJS2a) ## Clean out the rest of JS.
   re_minifyAll_js3 = re(reMinifyJS3a) ## Clean out extra white spaces of JS.
 
-proc minifyHtml*(html: string, noComments=true, experimental=false): string =
+proc minifyHtml*(html: string, experimental=false): string =
   ## HTML / XHTML Minifier based on Regexes.
   result = html
-  if likely(noComments):     result = replace(result, re_comments_html, " ")
-  if unlikely(experimental): result = multiReplace(result, multiReHtml)
+  if unlikely(experimental):
+    result = replace(result, re_comments_html, " ")
+    result = multiReplace(result, multiReHtml)
   result = replace(result, re_wtspaces_html, "> <").strip
 
 proc minifyCss*(css: string, noEmptyRules=true, noXtraSemicolon=true, condenseUnits=true, experimental=false): string =
