@@ -66,6 +66,8 @@ const
   semicoloncs2 = r";;+"
   empty_rules2 = r"[^\}\{]+\{\}"
   reMinifyCss2 = r"(?s)\s|/\*.*?\*/"
+  reMinifyJS2a = r"(?s)\s|/\*.*?\*/|//[^\r\n]*"
+  reMinifyJS3a = r"^\s+|\R\s*"
 
 let
   re_comments_html = re(commentshtml) ## Remove ``<!-- Comments -->``
@@ -74,6 +76,8 @@ let
   re_semicoloncss2 = re(semicoloncs2) ## Remove ``;;;;``
   re_emptyrule_css = re(empty_rules2) ## Remove ``body {}``
   re_minifyAll_css = re(reMinifyCss2) ## Clean out the rest of CSS.
+  re_minifyAll_js2 = re(reMinifyJS2a) ## Clean out the rest of JS.
+  re_minifyAll_js3 = re(reMinifyJS3a) ## Clean out extra white spaces of JS.
 
 proc minifyHtml*(html: string, noComments=true, experimental=false): string =
   ## HTML / XHTML Minifier based on Regexes.
@@ -95,9 +99,17 @@ proc minifyCss*(css: string, noEmptyRules=true, noXtraSemicolon=true, condenseUn
     result = replace(result, re_semicolon_css, "}")
     result = replace(result, re_semicoloncss2, ";")
 
+proc minifyJs*(js: string, experimental=false): string =
+  ## JS Minifier based on Regexes.
+  result = js
+  result = replace(result, re_minifyAll_js2, " ").strip
+  if unlikely(experimental): result = replace(result, re_minifyAll_js3, " ")
+
 runnableExamples:
   echo minifyHtml(readFile("example.html"))  ## HTML
   echo minifyCss(readFile("example.css"))    ## CSS
+  echo minifyJs(readFile("example.js"))      ## JS
+
 
 when is_main_module and defined(release) and not defined(js):  # When release, its a command line app to make queries.
   {.optimization: size.}
